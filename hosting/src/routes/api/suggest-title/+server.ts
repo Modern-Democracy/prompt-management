@@ -1,10 +1,8 @@
 import type { ChatCompletionRequestMessage, CreateChatCompletionRequest } from 'openai';
-import type { RequestHandler } from './$types';
-import { OpenAiModel, defaultOpenAiSettings, type OpenAiSettings } from '$misc/openai';
-import { error } from '@sveltejs/kit';
-import { getErrorMessage, respondToClient, throwIfUnset } from '$misc/error';
+import { OpenAiModel, defaultOpenAiSettings, type OpenAiSettings } from '../../../misc/openai';
+import { getErrorMessage, respondToClient, throwIfUnset } from '../../../misc/error';
 
-export const POST: RequestHandler = async ({ request, fetch }) => {
+export const POST = async ({ request, fetch }) => {
 	try {
 		const requestData = await request.json();
 		throwIfUnset('request data', requestData);
@@ -57,6 +55,6 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 
 		return respondToClient({ title });
 	} catch (err) {
-		throw error(500, getErrorMessage(err));
+		throw new Error(getErrorMessage(err));
 	}
 };

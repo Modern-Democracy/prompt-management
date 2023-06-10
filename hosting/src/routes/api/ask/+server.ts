@@ -1,9 +1,8 @@
 import type { ChatCompletionRequestMessage, CreateChatCompletionRequest } from 'openai';
-import type { RequestHandler } from './$types';
-import type { OpenAiSettings } from '$misc/openai';
-import { getErrorMessage, throwIfUnset } from '$misc/error';
+import { getErrorMessage, throwIfUnset } from '../../../misc/error';
+import type {OpenAiSettings} from "../../../misc/openai";
 
-export const POST: RequestHandler = async ({ request, fetch }) => {
+export const POST = async ({ request, fetch }) => {
 	try {
 		const requestData = await request.json();
 		throwIfUnset('request data', requestData);
@@ -52,6 +51,6 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 			}
 		});
 	} catch (err) {
-		throw error(500, getErrorMessage(err));
+		throw new Error(getErrorMessage(err));
 	}
 };
