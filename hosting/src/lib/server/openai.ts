@@ -1,15 +1,13 @@
-import type {CreateCompletionRequest} from "openai";
 import type {AxiosRequestConfig} from "axios";
-
-const { Configuration, OpenAIApi } = require("openai");
+import type {CreateCompletionRequest} from "openai";
+import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export async function createCompletion(completionRequest: CreateCompletionRequest, options?: AxiosRequestConfig) {
-    return await openai.createCompletion(completionRequest, options);
+export async function createCompletion(completionRequest: CreateCompletionRequest, options?: AxiosRequestConfig<any>) {
+    return await openai.createCompletion(completionRequest);
 }
 
 /*

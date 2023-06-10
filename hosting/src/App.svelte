@@ -2,6 +2,33 @@
   import svelteLogo from './assets/svelte.svg'
   import viteLogo from './assets/vite.svg'
   import Counter from './lib/Counter.svelte'
+  import ChatGPTConversation from "./lib/ChatGPTConversation.svelte";
+  import {onMount} from "svelte";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+  import {googleAuthProvider} from "./lib/firebase";
+
+  onMount(() => {
+    const auth = getAuth();
+    signInWithPopup(auth, googleAuthProvider)
+            .then((result) => {
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential.accessToken;
+              // The signed-in user info.
+              const user = result.user;
+              // IdP data available using getAdditionalUserInfo(result)
+              // ...
+            }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  });
 </script>
 
 <main>
@@ -19,13 +46,10 @@
     <Counter />
   </div>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
+  <div class="card">
+    <ChatGPTConversation />
+  </div>
 
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
 
 <style>

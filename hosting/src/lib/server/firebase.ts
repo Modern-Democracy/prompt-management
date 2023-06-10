@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
 export const googleAuthProvider = new GoogleAuthProvider();
 
