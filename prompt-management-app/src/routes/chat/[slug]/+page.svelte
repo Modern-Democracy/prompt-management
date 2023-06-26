@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount, tick } from 'svelte';
-    import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+    import {modalStore, type ModalSettings, Modal} from '@skeletonlabs/skeleton';
     import { XMark } from '@inqling/svelte-icons/heroicon-24-solid';
     import { Trash, Cog6Tooth, Share } from '@inqling/svelte-icons/heroicon-24-outline';
     import type { PageData } from './$types';
@@ -9,6 +9,7 @@
     import Toolbar from '$lib/Toolbar.svelte';
     import ChatInput from '$lib/ChatInput.svelte';
     import Chat from '$lib/Chat.svelte';
+    import ContextModal from "$lib/Modals/ContextModal.svelte";
     import HintMessage from '$lib/HintMessage.svelte';
     import TokenCost from '$lib/TokenCost.svelte';
     import { countTokens, estimateChatCost } from '$lib/misc/openai';
@@ -22,6 +23,7 @@
         type ChatMessage
     } from '$lib/misc/shared';
     import snarkdown from 'snarkdown';
+    import {modalComponentRegistry} from "$lib/misc/modalComponentRegistry";
 
     export let data: PageData;
 
@@ -72,7 +74,7 @@
         // sharing might have updated the slug of this chat
         // so we are either already on that page, or we go there
         if (savedSlug) {
-            goto(`/${savedSlug}`);
+            goto(`/chat/${savedSlug}`);
         }
     };
 
@@ -81,7 +83,7 @@
             track('deleteChat');
         }
         chatStore.deleteChat(slug);
-        goto('/');
+        goto('/chat');
     }
 
     async function handleCloseChat() {
@@ -93,7 +95,7 @@
 
         // already has a title
         if (chat.title !== slug || !canSuggestTitle(chat)) {
-            goto('/');
+            goto('/chat');
             return;
         }
 
@@ -104,12 +106,12 @@
                 chatStore.updateChat(slug, { title });
                 showToast(`Chat title set to: '${title}'`, 'secondary');
             }
-            goto('/');
+            goto('/chat');
         } else {
             showModalComponent('SuggestTitleModal', { slug }, () => {
                 // see https://www.reddit.com/r/sveltejs/comments/10o7tpu/sveltekit_issue_goto_not_working_on_ios/
                 // await tick() doesn't fix it, hence setTimeout
-                setTimeout(() => goto('/'), 0);
+                setTimeout(() => goto('/chat'), 0);
             });
         }
     }
@@ -257,6 +259,8 @@
             </HintMessage>
         </svelte:fragment>
     </Chat>
+
+    <Modal components={modalComponentRegistry} />
 
     <ChatInput {slug} chatCost={cost} bind:this={chatInput} />
 {/if}
