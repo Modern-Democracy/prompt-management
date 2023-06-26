@@ -45,13 +45,13 @@
 				{#if !isLoggedIn}
 					<a
 							class="btn btn-sm variant-ghost-surface"
-							href="login"
+							href="/login"
 					>
 						Login
 					</a>
 					<a
 							class="btn btn-sm variant-ghost-surface"
-							href="register"
+							href="/register"
 					>
 						Register
 					</a>
@@ -59,7 +59,7 @@
 					{displayName}
 					<a
 							class="btn btn-sm variant-ghost-surface"
-							href="logout"
+							href="/login" on:click={() => userState.set(null)}
 					>
 						Logout
 					</a>
