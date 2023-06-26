@@ -75,7 +75,7 @@
         // update the local store
         $chatStore = {};
 
-        goto('/');
+        goto('/chat');
     }
 </script>
 
