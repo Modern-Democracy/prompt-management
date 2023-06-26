@@ -41,6 +41,13 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"firebase": "^9.22.2"
+		"@inqling/svelte-icons": "^3.3.2",
+		"firebase": "^9.22.2",
+		"gpt3-tokenizer": "^1.1.5",
+		"javascript-time-ago": "^2.5.9",
+		"openai": "^3.3.0",
+		"snarkdown": "^2.0.0",
+		"svelte-legos": "^0.2.1",
+		"uuid": "^9.0.0"
 	}
 }
