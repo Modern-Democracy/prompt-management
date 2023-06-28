@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount, tick } from 'svelte';
-    import {modalStore, type ModalSettings, Modal} from '@skeletonlabs/skeleton';
+    import {modalStore, type ModalSettings} from '@skeletonlabs/skeleton';
     import { XMark } from '@inqling/svelte-icons/heroicon-24-solid';
     import { Trash, Cog6Tooth, Share } from '@inqling/svelte-icons/heroicon-24-outline';
     import type { PageData } from './$types';
@@ -23,7 +23,6 @@
         type ChatMessage
     } from '$lib/misc/shared';
     import snarkdown from 'snarkdown';
-    import {modalComponentRegistry} from "$lib/misc/modalComponentRegistry";
 
     export let data: PageData;
 
@@ -259,8 +258,6 @@
             </HintMessage>
         </svelte:fragment>
     </Chat>
-
-    <Modal components={modalComponentRegistry} />
 
     <ChatInput {slug} chatCost={cost} bind:this={chatInput} />
 {/if}
