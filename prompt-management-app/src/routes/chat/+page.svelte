@@ -83,7 +83,7 @@
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 px-4 md:px-8"
 >
     <!-- Add button -->
-    <button class="card p-4 grid variant-ghost-primary" on:click={() => createNewChat()}>
+    <button class="card p-4 grid variant-ghost-primary" on:click={() => createNewChat({title: 'New Chat'})}>
         <div class="flex space-x-2 md:space-x-4 items-center self-center justify-self-center">
             <PlusCircle class="w-10 h-10" />
             <span class="text-xl">New Chat</span>
