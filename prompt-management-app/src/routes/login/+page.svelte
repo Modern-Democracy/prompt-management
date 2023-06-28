@@ -1,9 +1,9 @@
 <script>
     import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-    import {googleAuthProvider} from "$lib/firebase";
     import {getContext, setContext} from "svelte";
-	import logo from '$lib/assets/google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png';
 	import {goto} from "$app/navigation";
+	import logo from '$lib/assets/google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png';
+	import {googleAuthProvider} from "$lib/misc/firebase.js";
 
     const userState = getContext('user');
 
