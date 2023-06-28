@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "69532fb7-791c-450e-9251-a1d719e22459",
+		"name": "Prompt Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "439307"
+	},
+	"item": [
+		{
+			"name": "Ask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"gpt-3.5-turbo-0613\",\r\n    \"messages\": [\r\n        {\r\n            \"role\": \"user\",\r\n            \"content\": \"Who won the stanley cup in 1993?\"\r\n        }\r\n    ],\r\n    \"temperature\": 1,\r\n    \"top_p\": 1,\r\n    \"n\": 1,\r\n    \"stream\": true,\r\n    \"max_tokens\": 250,\r\n    \"presence_penalty\": 0,\r\n    \"frequency_penalty\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/ask?messages=\"Who won the Stanley Cup in 1993?\"&settings={\"stream\":\"true\"}&openAiKey={{token}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ask"
+					],
+					"query": [
+						{
+							"key": "messages",
+							"value": "\"Who won the Stanley Cup in 1993?\""
+						},
+						{
+							"key": "settings",
+							"value": "{\"stream\":\"true\"}"
+						},
+						{
+							"key": "openAiKey",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ask - No Stream",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"gpt-3.5-turbo-0613\",\r\n    \"messages\": [\r\n        {\r\n            \"role\": \"user\",\r\n            \"content\": \"Who won the world series in 2020?\"\r\n        },\r\n        {\r\n            \"role\": \"assistant\",\r\n            \"content\": \"The Los Angeles Dodgers won the World Series in 2020.\"\r\n        },\r\n        {\r\n            \"role\": \"user\",\r\n            \"content\": \"Where was it played?\"\r\n        }\r\n    ],\r\n    \"temperature\": 1,\r\n    \"top_p\": 1,\r\n    \"n\": 1,\r\n    \"stream\": false,\r\n    \"max_tokens\": 250,\r\n    \"presence_penalty\": 0,\r\n    \"frequency_penalty\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/ask?messages=\"Who won the Stanley Cup in 1993?\"&settings={\"stream\":\"true\"}&openAiKey={{token}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ask"
+					],
+					"query": [
+						{
+							"key": "messages",
+							"value": "\"Who won the Stanley Cup in 1993?\""
+						},
+						{
+							"key": "settings",
+							"value": "{\"stream\":\"true\"}"
+						},
+						{
+							"key": "openAiKey",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5173",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "YOUR-OPENAI-TOKEN-HERE",
+			"type": "string"
+		}
+	]
+}
