@@ -5,10 +5,11 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import {AppShell, AppBar, Modal} from '@skeletonlabs/skeleton';
 
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import {modalComponentRegistry} from "$lib/misc/modalComponentRegistry";
 
 	// Create a store and update it when necessary...
 	const userState = writable();
@@ -70,3 +71,5 @@
 	<!-- Page Route Content -->
 	<slot />
 </AppShell>
+
+<Modal components={modalComponentRegistry} />
