@@ -10,6 +10,7 @@ import {
 	PUBLIC_FIREBASE_APP_ID
 } from '$env/static/public';
 import type { Chat, ChatMessage } from './shared';
+import {GoogleAuthProvider} from "firebase/auth";
 
 /**
  * This can only be executed server-side!
@@ -38,6 +39,8 @@ const firebaseConfig = {
 	messagingSenderId: PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 	appId: PUBLIC_FIREBASE_APP_ID,
 };
+
+export const googleAuthProvider = new GoogleAuthProvider();
 
 const app = initializeApp(firebaseConfig);
 
