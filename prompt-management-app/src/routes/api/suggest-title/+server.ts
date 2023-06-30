@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ request, fetch }) => {
 		throwIfUnset('messages', messages);
 
 		const fixedMessages = [
-			// take system, first user and first assisstant message into account
+			// take system, first user and first assistant message into account
 			...messages.slice(0, 3),
 			{
 				role: 'user',
