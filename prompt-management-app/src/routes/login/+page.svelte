@@ -3,7 +3,7 @@
     import {getContext, setContext} from "svelte";
 	import {goto} from "$app/navigation";
 	import logo from '$lib/assets/google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png';
-	import {googleAuthProvider} from "$lib/misc/firebase.js";
+	import {googleAuthProvider} from "$lib/misc/firebase";
 
     const userState = getContext('user');
 
