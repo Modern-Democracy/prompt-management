@@ -44,26 +44,12 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				{#if !isLoggedIn}
-					<a
-							class="btn btn-sm variant-ghost-surface"
-							href="/login"
-					>
-						Login
-					</a>
-					<a
-							class="btn btn-sm variant-ghost-surface"
-							href="/register"
-					>
-						Register
-					</a>
+					<a href="/login" class="btn btn-sm variant-ghost-surface">Login</a>
+					<a href="/register" class="btn btn-sm variant-ghost-surface">Register</a>
 				{:else}
 					{displayName}
-					<a
-							class="btn btn-sm variant-ghost-surface"
-							href="/login" on:click={() => userState.set(null)}
-					>
-						Logout
-					</a>
+					<a href="/chat" class="btn btn-sm variant-ghost-surface">Chat</a>
+					<a href="/login" on:click={() => userState.set(null)} class="btn btn-sm variant-ghost-surface">Logout</a>
 				{/if}
 			</svelte:fragment>
 		</AppBar>
