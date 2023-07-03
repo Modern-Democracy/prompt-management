@@ -6,7 +6,7 @@
 	import { XMark, PencilSquare } from '@inqling/svelte-icons/heroicon-24-solid';
 	import { chatStore } from '$lib/misc/stores';
 	import { countTokens } from '$lib/misc/openai';
-	import TokenCost from './TokenCost.svelte';
+	// import TokenCost from './TokenCost.svelte';
 	import ChatMessages from './ChatMessages.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -53,7 +53,7 @@
 
 		<div class="flex space-x-4">
 			<!-- Tokens -->
-			<TokenCost tokens={countTokens(message)} />
+<!--			<TokenCost tokens={countTokens(message)} />-->
 
 			{#if $chatStore[slug] && message.id}
 				<div class="flex space-x-0">
