@@ -11,6 +11,7 @@ let tokenizer: GPT3Tokenizer;
 
 export enum OpenAiModel {
 	Gpt35Turbo = 'gpt-3.5-turbo',
+	Gpt35Turbo16k = 'gpt-3.5-turbo-16k',
 	Gpt4 = 'gpt-4',
 	Gpt432k = 'gpt-4-32k'
 }
