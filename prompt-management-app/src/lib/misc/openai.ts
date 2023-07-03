@@ -44,6 +44,11 @@ export const models: { [key in OpenAiModel]: OpenAiModelStats } = {
 		costPrompt: 0.002,
 		costCompletion: 0.002
 	},
+	'gpt-3.5-turbo-16k': {
+		maxTokens: 16384,
+		costPrompt: 0.03,
+		costCompletion: 0.003
+	},
 	'gpt-4': {
 		maxTokens: 8192,
 		costPrompt: 0.03,
