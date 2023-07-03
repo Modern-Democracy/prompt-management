@@ -5,7 +5,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import type { Chat } from '$lib/misc/shared';
 	import { chatStore, enhancedLiveAnswerStore, isLoadingAnswerStore } from '$lib/misc/stores';
-	import ChatMessages from './ChatMessages.svelte';
+	import ChatMessages from "$lib/ChatMessages.svelte";
 
 	export let slug: string;
 	export let chat: Chat | undefined = undefined;
