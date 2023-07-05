@@ -9,17 +9,17 @@
 		type ChatMessage,
 		showModalComponent,
 		showToast,
-		track
 	} from '$lib/misc/shared';
 	import {
 		chatStore,
-		// eventSourceStore,
 		isLoadingAnswerStore,
 		liveAnswerStore,
 		enhancedLiveAnswerStore,
 		settingsStore
 	} from '$lib/misc/stores';
 	import { countTokens } from '$lib/misc/openai';
+	import {ask} from "$lib/api";
+	import {CreateChatCompletionRequest} from "openai";
 
 	export let slug: string;
 	export let chatCost: ChatCost | null;
@@ -70,29 +70,31 @@
 
 		if (!isEditMode) {
 			chatStore.addMessageToChat(slug, message, parent || undefined);
-			track('ask');
 		} else if (originalMessage && originalMessage.id) {
 			chatStore.addAsSibling(slug, originalMessage.id, message);
-			track('edit');
 		}
 
 		// message now has an id
 		lastUserMessage = message;
 
-		const payload = {
-			// OpenAI API complains if we send additionale props
-			messages: currentMessages?.map(
-				(m) =>
-					({
-						role: m.role,
-						content: m.content,
-						name: m.name
-					} as ChatCompletionRequestMessage)
-			),
-			settings: chat.settings,
-			openAiKey: $settingsStore.openAiApiKey
+		const payload: CreateChatCompletionRequest = {
+			"model": "gpt-3.5-turbo",
+			"messages": [
+				{
+					"role": "user",
+					"content": "Who won the stanley cup in 1993?"
+				}
+			],
+			"temperature": 1,
+			"top_p": 1,
+			"n": 2,
+			"stream": true,
+			"max_tokens": 250,
+			"presence_penalty": 0,
+			"frequency_penalty": 0
 		};
 
+		ask(slug, chat, payload);
 		// $eventSourceStore.start(payload, handleAnswer, handleError, handleAbort);
 		input = '';
 	}

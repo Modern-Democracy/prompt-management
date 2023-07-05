@@ -3,7 +3,7 @@
 	import { clickToCopyAction, confettiAction } from 'svelte-legos';
 	import { DocumentDuplicate } from '@inqling/svelte-icons/heroicon-24-solid';
 	import { chatStore } from '$lib/misc/stores';
-	import { showToast, track } from '$lib/misc/shared';
+	import { showToast } from '$lib/misc/shared';
 
 	let slug: string = $modalStore[0].meta?.slug || '';
 	$: chat = $chatStore[slug];
@@ -51,7 +51,6 @@
 		});
 
 		responseSlug = savedSlug;
-		track('shareChat');
 		if ($modalStore[0].response) {
 			$modalStore[0].response(responseSlug);
 		}

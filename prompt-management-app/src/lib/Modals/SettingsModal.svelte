@@ -2,7 +2,6 @@
 	import { Accordion, AccordionItem, modalStore } from '@skeletonlabs/skeleton';
 	import { chatStore, settingsStore } from '$lib/misc/stores';
 	import { models, OpenAiModel } from '$lib/misc/openai';
-	import { track } from '$lib/misc/shared';
 
 	let slug: string = $modalStore[0].meta?.slug || '';
 	let title = $chatStore[slug].title;
@@ -13,7 +12,6 @@
 		chatStore.updateChat(slug, { title, settings });
 
 		savedSettings = { ...settings };
-		track('saveSettings');
 		modalStore.close();
 	}
 

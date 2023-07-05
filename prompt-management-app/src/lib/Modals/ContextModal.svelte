@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Accordion, AccordionItem, modalStore } from '@skeletonlabs/skeleton';
 	import { chatStore } from '$lib/misc/stores';
-	import { track } from '$lib/misc/shared';
 
 	let slug: string = $modalStore[0].meta?.slug || '';
 	let chat = $chatStore[slug];
@@ -47,7 +46,6 @@
 			chats[slug].settings.stop = useStopSequence ? stopSequence : '';
 			return chats;
 		});
-		track('editChatContext');
 		modalStore.close();
 	}
 

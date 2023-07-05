@@ -1,2 +1,2 @@
-import ask from './ask';
-export { ask };
+import { ask, askAndBlock } from './ask';
+export { ask, askAndBlock };

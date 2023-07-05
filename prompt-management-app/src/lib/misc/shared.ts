@@ -128,12 +128,6 @@ export function showModalComponent(
 	modalStore.trigger(modal);
 }
 
-export function track(action: string) {
-	if (PUBLIC_DISABLE_TRACKING === 'true') {
-		return;
-	}
-}
-
 export function showToast(
 	message: string,
 	type: 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' = 'primary',

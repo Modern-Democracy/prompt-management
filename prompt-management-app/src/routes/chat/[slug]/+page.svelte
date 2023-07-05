@@ -19,7 +19,6 @@
         showModalComponent,
         showToast,
         suggestChatTitle,
-        track,
         type ChatMessage
     } from '$lib/misc/shared';
     import snarkdown from 'snarkdown';
@@ -79,7 +78,6 @@
 
     function deleteChat(dontTrack = false) {
         if (!dontTrack) {
-            track('deleteChat');
         }
         chatStore.deleteChat(slug);
         goto('/chat');
