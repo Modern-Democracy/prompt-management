@@ -17,7 +17,7 @@
 		enhancedLiveAnswerStore,
 		settingsStore
 	} from '$lib/misc/stores';
-	import { countTokens } from '$lib/misc/openai';
+	import {countTokens, defaultOpenAiSettings} from '$lib/misc/openai';
 	import {ask} from "$lib/api";
 	import {CreateChatCompletionRequest} from "openai";
 
@@ -78,23 +78,16 @@
 		lastUserMessage = message;
 
 		const payload: CreateChatCompletionRequest = {
-			"model": "gpt-3.5-turbo",
 			"messages": [
 				{
+					"content": message.content,
 					"role": "user",
-					"content": "Who won the stanley cup in 1993?"
-				}
+				},
 			],
-			"temperature": 1,
-			"top_p": 1,
-			"n": 2,
-			"stream": true,
-			"max_tokens": 250,
-			"presence_penalty": 0,
-			"frequency_penalty": 0
+			...defaultOpenAiSettings,
 		};
 
-		ask(slug, chat, payload);
+		ask(slug, chat, payload, chatStore);
 		// $eventSourceStore.start(payload, handleAnswer, handleError, handleAbort);
 		input = '';
 	}

@@ -18,17 +18,36 @@ export enum OpenAiModel {
 
 export interface OpenAiSettings {
 	model: OpenAiModel;
-	max_tokens: number; // just for completions
 	temperature: number; // 0-2
 	top_p: number; // 0-1
+	n: number; // any integer
+	stream: boolean; // false-true
+	max_tokens: number; // just for completions
 	stop?: string | string[]; // max 4 entries in array
+	presence_penalty: number; // -2-2
+	frequency_penalty: number; // -2-2
 }
+
+export const defaultContextMessage = `Provide information in a direct, formal style without preambles, summaries, or using explanatory canned responses.
+
+If you need clarification, ask before forming a response.
+
+If my prompt lacks detail, list the details that are missing, organized by category and hierarchy.
+
+Use existing models. Give clear options for me to choose.
+
+Think carefully and logically, explaining your answer.
+`;
 
 export const defaultOpenAiSettings: OpenAiSettings = {
 	model: OpenAiModel.Gpt35Turbo,
-	max_tokens: 2048,
 	temperature: 1,
-	top_p: 1
+	top_p: 1,
+	n: 1,
+	stream: true,
+	max_tokens: 2048,
+	presence_penalty: 0,
+	frequency_penalty: 0
 };
 
 export interface OpenAiModelStats {
