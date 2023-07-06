@@ -11,7 +11,7 @@
     import Chat from '$lib/Chat.svelte';
     import ContextModal from "$lib/Modals/ContextModal.svelte";
     import HintMessage from '$lib/HintMessage.svelte';
-    import TokenCost from '$lib/TokenCost.svelte';
+    // import TokenCost from '$lib/TokenCost.svelte';
     import { countTokens, estimateChatCost } from '$lib/misc/openai';
     import {
         canSuggestTitle,
@@ -232,7 +232,7 @@
                     {#if hasContext}
                         <!-- Tokens -->
                         <div class="justify-self-end mb-2">
-                            <TokenCost tokens={countTokens(chat.contextMessage)} />
+<!--                            <TokenCost tokens={countTokens(chat.contextMessage)} />-->
                         </div>
                     {/if}
                     <div class="flex flex-row md:flex-col space-x-2 space-y-2">
