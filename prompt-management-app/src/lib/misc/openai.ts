@@ -60,13 +60,13 @@ export interface OpenAiModelStats {
 export const models: { [key in OpenAiModel]: OpenAiModelStats } = {
 	'gpt-3.5-turbo': {
 		maxTokens: 4096,
-		costPrompt: 0.002,
+		costPrompt: 0.0015,
 		costCompletion: 0.002
 	},
 	'gpt-3.5-turbo-16k': {
 		maxTokens: 16384,
 		costPrompt: 0.03,
-		costCompletion: 0.003
+		costCompletion: 0.004
 	},
 	'gpt-4': {
 		maxTokens: 8192,
