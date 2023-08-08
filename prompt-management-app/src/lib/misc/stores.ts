@@ -94,7 +94,7 @@ const addAsSibling = (slug: string, originalMessageId: string, message: ChatMess
 	const parentData = ChatStorekeeper.findParent(originalMessageId, chat.messages);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	delete message.id;
-	delete message.messages;
+	delete message.childMessages;
 
 	addMessageToChat(slug, message, parentData?.parent);
 };
@@ -113,12 +113,12 @@ const deleteMessage = (slug: string, id: string) => {
 
 	const deleteMessageAndHandleChildren = (parentMessages: ChatMessage[], index: number) => {
 		const hasSiblings = parentMessages.length > 1;
-		if (hasSiblings || !message.messages) {
+		if (hasSiblings || !message.childMessages) {
 			// remove the message and all its children
 			parentMessages.splice(index, 1);
-		} else if (message.messages) {
+		} else if (message.childMessages) {
 			// move the children of the message one level up
-			parentMessages.splice(index, 1, ...message.messages);
+			parentMessages.splice(index, 1, ...message.childMessages);
 		}
 		if (message.isSelected && parentMessages.length > 1) {
 			// select the next sibling
@@ -136,8 +136,8 @@ const deleteMessage = (slug: string, id: string) => {
 		if (parentData) {
 			const { parent, index } = parentData;
 			// always true, check just for TypeScript:
-			if (parent.messages) {
-				deleteMessageAndHandleChildren(parent.messages, index);
+			if (parent.childMessages) {
+				deleteMessageAndHandleChildren(parent.childMessages, index);
 			}
 		} else {
 			throw new Error('Message not found in the chat.');

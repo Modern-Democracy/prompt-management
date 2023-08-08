@@ -12,12 +12,12 @@ export class ChatStorekeeper {
 			}
 
 			for (const message of messages) {
-				if (message.messages && message.messages.length > 1) {
+				if (message.childMessages && message.childMessages.length > 1) {
 					return false;
 				}
 
-				if (message.messages && message.messages.length === 1) {
-					return checkMessages(message.messages);
+				if (message.childMessages && message.childMessages.length === 1) {
+					return checkMessages(message.childMessages);
 				}
 			}
 
@@ -31,8 +31,8 @@ export class ChatStorekeeper {
 				return message;
 			}
 
-			if (message.messages) {
-				const foundMessage = ChatStorekeeper.getById(messageId, message.messages);
+			if (message.childMessages) {
+				const foundMessage = ChatStorekeeper.getById(messageId, message.childMessages);
 				if (foundMessage) {
 					return foundMessage;
 				}
@@ -47,8 +47,8 @@ export class ChatStorekeeper {
 	): { parent: ChatMessage; index: number } | null {
 		for (let i = 0; i < chatMessages.length; i++) {
 			const parent = chatMessages[i];
-			if (parent.messages) {
-				const index = parent.messages.findIndex((msg) => msg.id === messageId);
+			if (parent.childMessages) {
+				const index = parent.childMessages.findIndex((msg) => msg.id === messageId);
 				if (index !== -1) {
 					return {
 						parent,
@@ -56,7 +56,7 @@ export class ChatStorekeeper {
 					};
 				}
 
-				const foundParent = ChatStorekeeper.findParent(messageId, parent.messages);
+				const foundParent = ChatStorekeeper.findParent(messageId, parent.childMessages);
 				if (foundParent) {
 					return foundParent;
 				}
@@ -75,13 +75,13 @@ export class ChatStorekeeper {
 			if (message.id === parentId) {
 				return {
 					...message,
-					messages: message.messages ? [...message.messages, messageToAdd] : [messageToAdd]
+					messages: message.childMessages ? [...message.childMessages, messageToAdd] : [messageToAdd]
 				};
 			}
 
-			if (message.messages) {
-				message.messages = ChatStorekeeper.addMessageAsChild(
-					message.messages,
+			if (message.childMessages) {
+				message.childMessages = ChatStorekeeper.addMessageAsChild(
+					message.childMessages,
 					parentId,
 					messageToAdd
 				);
@@ -92,21 +92,22 @@ export class ChatStorekeeper {
 	}
 
 	static getCurrentMessageBranch(chat: Chat, includeContext = true): ChatMessage[] {
-		const result: ChatMessage[] =
-			includeContext && chat.contextMessage.content ? [chat.contextMessage] : [];
+		const result: ChatMessage[] = includeContext && chat.contextMessage.content
+			? [{ message: chat.contextMessage }]
+			: [];
 
 		function traverse(messages: ChatMessage[]): void {
 			if (messages.length === 1) {
 				result.push(messages[0]);
-				if (messages[0].messages) {
-					traverse(messages[0].messages);
+				if (messages[0].childMessages) {
+					traverse(messages[0].childMessages);
 				}
 			} else {
 				for (const message of messages) {
 					if (message.isSelected) {
 						result.push(message);
-						if (message.messages) {
-							traverse(message.messages);
+						if (message.childMessages) {
+							traverse(message.childMessages);
 						}
 						break;
 					}
@@ -132,8 +133,8 @@ export class ChatStorekeeper {
 						sibling.isSelected = false;
 					}
 				}
-			} else if (message.messages) {
-				found = ChatStorekeeper.selectSibling(id, message.messages);
+			} else if (message.childMessages) {
+				found = ChatStorekeeper.selectSibling(id, message.childMessages);
 			}
 		}
 		return found;
@@ -148,8 +149,8 @@ export class ChatStorekeeper {
 			let count = 0;
 			for (const message of messages) {
 				count += 1;
-				if (message.messages) {
-					count += countMessages(message.messages);
+				if (message.childMessages) {
+					count += countMessages(message.childMessages);
 				}
 			}
 			return count;

@@ -1,26 +1,29 @@
 import type { ChatCompletionRequestMessage } from 'openai';
-import { get } from 'svelte/store';
-import { defaultOpenAiSettings, OpenAiModel, type OpenAiSettings } from './openai';
+import {ChatCompletionRequestMessageRoleEnum} from "openai/api";
 import {
 	modalStore,
 	type ModalSettings,
 	type ToastSettings,
 	toastStore
 } from '@skeletonlabs/skeleton';
+import { get } from 'svelte/store';
 
 import { goto } from '$app/navigation';
-import { chatStore, settingsStore } from './stores';
-import { PUBLIC_DISABLE_TRACKING } from '$env/static/public';
+import { defaultOpenAiSettings, OpenAiModel, type OpenAiSettings } from '$lib/misc/openai';
 import {generateSlug} from "$lib/misc/slug";
+import { chatStore, settingsStore } from '$lib/misc/stores';
 
-export interface ChatMessage extends ChatCompletionRequestMessage {
+export interface ChatMessage {
 	id?: string;
-	messages?: ChatMessage[];
+	index?: number;
+	message: ChatCompletionRequestMessage;
+	childMessages?: ChatMessage[];
 	isSelected?: boolean;
 	isAborted?: boolean;
 }
 
 export interface Chat {
+	id?: string;
 	title: string;
 	settings: OpenAiSettings;
 	contextMessage: ChatCompletionRequestMessage;
@@ -48,15 +51,21 @@ export interface ChatCost {
 	maxTokensForModel: number;
 }
 
+// Provide a function to generate a new chat instance based on the createNewChat example and Chat interface. Ensure it adheres to proper standards.
+// Provide a function to determine if a chat has a title. Ensure it adheres to proper standards.
+// Provide a function to suggest a chat title. Ensure it adheres to proper standards.
+// Provide a function to show a modal component. Ensure it adheres to proper standards.
+// Provide a function to show a toast. Ensure it adheres to proper standards.
+
 export function createNewChat(template?: {
 	context?: string;
 	title?: string;
 	settings?: OpenAiSettings;
-	messages?: ChatCompletionRequestMessage[];
+	messages?: ChatMessage[];
 }) {
 	const settings = { ...(template?.settings || defaultOpenAiSettings) };
 	const { defaultModel } = get(settingsStore);
-	if (defaultModel) {
+	if (!settings.model && defaultModel) {
 		settings.model = defaultModel;
 	}
 
@@ -65,7 +74,7 @@ export function createNewChat(template?: {
 		title: template?.title || slug,
 		settings,
 		contextMessage: {
-			role: 'system',
+			role: ChatCompletionRequestMessageRoleEnum.System,
 			content: template?.context || ''
 		},
 		messages: template?.messages || [],
@@ -90,15 +99,15 @@ export async function suggestChatTitle(chat: Chat, openAiApiKey: string): Promis
 		chat.messages.length === 1
 			? chatStore.getCurrentMessageBranch(chat)
 			: chat.contextMessage?.content
-			? [chat.contextMessage, ...chat.messages]
+			? [{ message: chat.contextMessage }, ...chat.messages]
 			: chat.messages;
 
 	const filteredMessages = messages?.slice(0, chat.contextMessage?.content ? 3 : 2).map(
 		(m) =>
 			({
-				role: m.role,
-				content: m.content,
-				name: m.name
+				role: m.message.role,
+				content: m.message.content,
+				name: m.message.name
 			} as ChatCompletionRequestMessage)
 	);
 

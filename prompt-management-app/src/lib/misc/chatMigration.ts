@@ -6,7 +6,7 @@ function hasMissingId(messages: ChatMessage[]): boolean {
 		if (!message.id) {
 			return true;
 		}
-		if (message.messages && hasMissingId(message.messages)) {
+		if (message.childMessages && hasMissingId(message.childMessages)) {
 			return true;
 		}
 	}
@@ -18,8 +18,8 @@ function assignMessageId(messages: ChatMessage[]): void {
 		if (!msg.id) {
 			msg.id = uuidv4();
 		}
-		if (msg.messages) {
-			assignMessageId(msg.messages);
+		if (msg.childMessages) {
+			assignMessageId(msg.childMessages);
 		}
 	}
 }
@@ -29,15 +29,28 @@ function assignMessageIds(chat: Chat): void {
 }
 
 function nestMessages(chat: Chat): void {
+	if (!chat) {
+		console.log('chat is undefined');
+	}
 	const messages: ChatMessage[] = chat.messages;
 
 	let currentMessage: ChatMessage | undefined;
+	let isMessagesUndefined = !messages;
+	for (const message of messages) {
+		if (!message) {
+			isMessagesUndefined = true;
+			break;
+		}
+	}
+	if (isMessagesUndefined) {
+		throw new Error('messages is undefined');
+	}
 	for (const message of messages) {
 		if (!currentMessage) {
 			chat.messages = [message]; // set the first message in the array as root
 			currentMessage = message;
 		} else {
-			currentMessage.messages = [message]; // nest the next message
+			currentMessage.childMessages = [message]; // nest the next message
 			currentMessage = message;
 		}
 	}

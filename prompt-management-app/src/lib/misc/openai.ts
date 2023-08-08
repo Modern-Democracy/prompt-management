@@ -111,11 +111,11 @@ export function estimateChatCost(chat: Chat): ChatCost {
 	const messages = ChatStorekeeper.getCurrentMessageBranch(chat);
 
 	for (const message of messages) {
-		if (message.role === 'assistant') {
-			tokensCompletion += countTokens(message);
+		if (message.message.role === 'assistant') {
+			tokensCompletion += countTokens(message.message);
 		} else {
 			// context counts as prompt (I think...)
-			tokensPrompt += countTokens(message);
+			tokensPrompt += countTokens(message.message);
 		}
 	}
 

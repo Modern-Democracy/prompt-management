@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { ChatCompletionRequestMessage } from 'openai';
 	import { onDestroy, tick } from 'svelte';
 	import { textareaAutosizeAction } from 'svelte-legos';
 	import { focusTrap } from '@skeletonlabs/skeleton';
 	import { CodeBracket, PaperAirplane, CircleStack } from '@inqling/svelte-icons/heroicon-24-solid';
 	import {
+		type Chat,
 		type ChatCost,
 		type ChatMessage,
 		showModalComponent,
@@ -20,6 +20,7 @@
 	import {countTokens, defaultOpenAiSettings} from '$lib/misc/openai';
 	import {ask} from "$lib/api";
 	import {CreateChatCompletionRequest} from "openai";
+	import {ChatCompletionRequestMessageRoleEnum} from "openai/api";
 
 	export let slug: string;
 	export let chatCost: ChatCost | null;
@@ -34,12 +35,17 @@
 
 	let isEditMode = false;
 	let originalMessage: ChatMessage | null = null;
+	let chat: Chat;
 
 	$: chat = $chatStore[slug];
 	$: message = {
-		role: 'user',
-		content: input.trim()
-	} as ChatCompletionRequestMessage;
+		message: [{
+			role: ChatCompletionRequestMessageRoleEnum.User,
+			content: input.trim(),
+		}],
+		childMessages: [],
+		isSelected: true,
+	} as ChatMessage;
 
 	const unsubscribe = chatStore.subscribe((chats) => {
 		const chat = chats[slug];
@@ -76,19 +82,27 @@
 
 		// message now has an id
 		lastUserMessage = message;
-
 		const payload: CreateChatCompletionRequest = {
 			"messages": [
 				{
-					"content": message.content,
-					"role": "user",
+					role: chat.contextMessage.role,
+					content: chat.contextMessage.content,
+				},
+				...chat.messages.map((currentMessage) => {
+					return {
+						role: currentMessage.message.role,
+						content: currentMessage.message.content,
+					};
+				}),
+				{
+					role: ChatCompletionRequestMessageRoleEnum.User,
+					content: message.content,
 				},
 			],
 			...defaultOpenAiSettings,
 		};
 
 		ask(slug, chat, payload, chatStore);
-		// $eventSourceStore.start(payload, handleAnswer, handleError, handleAbort);
 		input = '';
 	}
 

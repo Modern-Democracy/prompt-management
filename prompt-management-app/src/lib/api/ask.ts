@@ -1,7 +1,8 @@
 import type {CreateChatCompletionRequest, CreateChatCompletionResponse} from "openai";
 import {Observable} from "rxjs";
-import Chat from "$lib/Chat.svelte";
 import type {ChatStore} from "$lib/misc/stores";
+import {isLoadingAnswerStore} from "$lib/misc/stores";
+import type {Chat, ChatMessage} from "$lib/misc/shared";
 
 function fetchAsStream(url: string, payload: any): Observable<Uint8Array> {
     return new Observable((subscriber) => {
@@ -65,20 +66,17 @@ export function ask(slug: string, chat: Chat, payload: CreateChatCompletionReque
                                 } else {
                                     throw new Error(`Unexpected object type: ${packet.object}`);
                                 }
-                                    /**
-                                     * [
-                                     *     "{\"message\":\"Additional properties are not allowed ('id', 'isSelected' were unexpected) - 'messages.0'\"}"
-                                     * ]
-                                     */
                             }
                             // @ts-ignore
                             const targetMessage = chat.messages.find((message) => message.id === packet.id && (message.index === undefined || message.index === packet.choices[0].index));
                             if (!targetMessage) {
-                                const newMessage = {
+                                const newMessage: ChatMessage = {
                                     id: packet.id,
-                                    content: packet.choices[0].delta.content,
-                                    role: packet.choices[0].delta.role,
-                                    messages: [],
+                                    message: {
+                                        content: packet.choices[0].delta.content,
+                                        role: packet.choices[0].delta.role,
+                                    },
+                                    childMessages: [],
                                 };
                                 if (packet.choices[0].index !== undefined) {
                                     newMessage.index = packet.choices[0].index;
@@ -88,10 +86,11 @@ export function ask(slug: string, chat: Chat, payload: CreateChatCompletionReque
                             } else if (packet.choices[0].finish_reason === 'stop') {
                                 console.debug('Finish reason is stop, skipping');
                             } else {
-                                targetMessage.content = `${targetMessage.content}${packet.choices[0].delta.content}`;
+                                // Append latest chunk to existing message
+                                targetMessage.message.content = `${targetMessage.message.content}${packet.choices[0].delta.content}`;
                                 chatStore.updateChat(slug, chat);
                             }
-                        } else {
+                        } else { 
                             console.debug('Skipping empty line');
                         }
                     }
@@ -106,6 +105,7 @@ export function ask(slug: string, chat: Chat, payload: CreateChatCompletionReque
             },
             complete() {
                 console.log(`Done loading data: ${JSON.stringify(chat)}`);
+                isLoadingAnswerStore.set(false);
             },
         });
     } else {
